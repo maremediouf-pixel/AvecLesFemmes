@@ -21,19 +21,19 @@ class MigrationExecuteCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // 1. Création de la migration (processus séparé)
-        if (!$this->run(['make:migration', '--no-interaction'], $output)) {
+        if (!$this->runConsole(['make:migration', '--no-interaction'], $output)) {
             return Command::FAILURE;
         }
 
-        // 2. Exécution de la migration (nouveau processus, il voit le nouveau fichier)
-        if (!$this->run(['doctrine:migrations:migrate', '--no-interaction'], $output)) {
+        // 2. Exécution de la migration (nouveau processus : il voit le nouveau fichier)
+        if (!$this->runConsole(['doctrine:migrations:migrate', '--no-interaction'], $output)) {
             return Command::FAILURE;
         }
 
         return Command::SUCCESS;
     }
 
-    private function run(array $arguments, OutputInterface $output): bool
+    private function runConsole(array $arguments, OutputInterface $output): bool
     {
         $process = new Process(
             array_merge([PHP_BINARY, 'bin/console'], $arguments),
