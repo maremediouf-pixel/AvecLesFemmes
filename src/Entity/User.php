@@ -30,11 +30,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 100)]
     private ?string $adresse = null;
 
-    #[ORM\Column(length: 100)]
-    private ?string $login = null;
+   #[ORM\Column(length: 100, unique: true)]
+private ?string $login = null;
 
-    #[ORM\Column(length: 100)]
-    private ?string $password = null;
+#[ORM\Column(length: 255)]
+private ?string $password = null;
 
     public function getId(): ?int
     {
@@ -100,4 +100,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    public function getUserIdentifier(): string
+{
+    return (string) $this->login;
+}
+
+public function getRoles(): array
+{
+    return ['ROLE_USER'];
+}
+
+public function eraseCredentials(): void
+{
+}
 }
