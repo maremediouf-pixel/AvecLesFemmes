@@ -27,8 +27,8 @@ class Groupement
     /**
      * @var Collection<int, Campagne>
      */
-    #[ORM\OneToMany(targetEntity: Campagne::class, mappedBy: 'campagne')]
-    private Collection $campagnes;
+    #[ORM\OneToMany(targetEntity: Campagne::class, mappedBy: 'groupement')]
+private Collection $campagnes;
 
     /**
      * @var Collection<int, Membre>

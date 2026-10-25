@@ -21,8 +21,8 @@ class Type
     /**
      * @var Collection<int, Campagne>
      */
-    #[ORM\OneToMany(targetEntity: Campagne::class, mappedBy: 'Type')]
-    private Collection $campagnes;
+    #[ORM\OneToMany(targetEntity: Campagne::class, mappedBy: 'type')]
+private Collection $campagnes;
 
     public function __construct()
     {
