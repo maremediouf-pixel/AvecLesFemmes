@@ -75,7 +75,7 @@
         "symfony/polyfill-php83": "*",
         "symfony/polyfill-php84": "*"
     },
-    "scripts": {
+        "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
@@ -86,6 +86,21 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "dioufmareme:entity:create": [
+            "Composer\\Config::disableProcessTimeout",
+            "@php bin/console make:entity"
+        ],
+        "dioufmareme:db:create": [
+            "@php bin/console doctrine:database:drop --if-exists --force",
+            "@php bin/console doctrine:database:create"
+        ],
+        "dioufmareme:cache:clear": [
+            "@php bin/console cache:clear"
+        ],
+        "dioufmareme:migration:execute": [
+            "@php bin/console make:migration --no-interaction",
+            "@php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration"
         ]
     },
     "conflict": {
