@@ -34,6 +34,10 @@ class Campagne
     #[ORM\OneToMany(targetEntity: ModeCotisation::class, mappedBy: 'campagne')]
     private Collection $modeCotisations;
 
+    #[ORM\ManyToOne(inversedBy: 'campagnes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?type $Type = null;
+
     public function __construct()
     {
         $this->modeCotisations = new ArrayCollection();
@@ -118,6 +122,18 @@ class Campagne
                 $modeCotisation->setCampagne(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): ?type
+    {
+        return $this->Type;
+    }
+
+    public function setType(?type $Type): static
+    {
+        $this->Type = $Type;
 
         return $this;
     }
