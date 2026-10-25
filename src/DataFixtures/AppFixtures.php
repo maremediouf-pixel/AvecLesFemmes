@@ -32,7 +32,7 @@ class AppFixtures extends Fixture
         $groupement = (new Groupement())
             ->setNom('Groupement principal')
             ->setAdresse('Dakar')
-            ->setTel('770000000');
+            ->setTelephone('770000000');
         $manager->persist($groupement);
 
         // Administrateur
