@@ -20,7 +20,7 @@ class Campagne
     private ?string $nom = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $datedebut = null;
+    private ?\DateTime $dateDebut = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $dateFin = null;
@@ -36,12 +36,11 @@ class Campagne
 
     #[ORM\ManyToOne(inversedBy: 'campagnes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?type $Type = null;
+    private ?Type $type = null;
 
     #[ORM\ManyToOne(inversedBy: 'campagnes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Groupement $campagne = null;
-
+    private ?Groupement $groupement = null;
 
     public function __construct()
     {
@@ -65,14 +64,14 @@ class Campagne
         return $this;
     }
 
-    public function getDatedebut(): ?\DateTime
+    public function getDateDebut(): ?\DateTime
     {
-        return $this->datedebut;
+        return $this->dateDebut;
     }
 
-    public function setDatedebut(\DateTime $datedebut): static
+    public function setDateDebut(\DateTime $dateDebut): static
     {
-        $this->datedebut = $datedebut;
+        $this->dateDebut = $dateDebut;
 
         return $this;
     }
@@ -131,29 +130,27 @@ class Campagne
         return $this;
     }
 
-    public function getType(): ?type
+    public function getType(): ?Type
     {
-        return $this->Type;
+        return $this->type;
     }
 
-    public function setType(?type $Type): static
+    public function setType(?Type $type): static
     {
-        $this->Type = $Type;
+        $this->type = $type;
 
         return $this;
     }
 
-    public function getCampagne(): ?Groupement
+    public function getGroupement(): ?Groupement
     {
-        return $this->campagne;
+        return $this->groupement;
     }
 
-    public function setCampagne(?Groupement $campagne): static
+    public function setGroupement(?Groupement $groupement): static
     {
-        $this->campagne = $campagne;
+        $this->groupement = $groupement;
 
         return $this;
     }
-
-    
 }

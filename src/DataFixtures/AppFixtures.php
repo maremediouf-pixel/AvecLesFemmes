@@ -134,8 +134,8 @@ class AppFixtures extends Fixture
             foreach ($modeles as [$nom, $typeNom, $debut, $fin, $montant, $libre, $indices]) {
                 $campagne = (new Campagne())
                     ->setNom($nom . ' - ' . $data['nom'])
-                    ->setDateDebut(new \DateTimeImmutable($debut))
-                    ->setDateFin(new \DateTimeImmutable($fin))
+                   ->setDateDebut(new \DateTime($debut))
+                   ->setDateFin(new \DateTime($fin))
                     ->setMontant($montant * ($g % 2 === 0 ? 1 : 2))
                     ->setType($types[$typeNom])
                     ->setGroupement($groupement);
