@@ -38,6 +38,11 @@ class Campagne
     #[ORM\JoinColumn(nullable: false)]
     private ?type $Type = null;
 
+    #[ORM\ManyToOne(inversedBy: 'campagnes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Groupement $campagne = null;
+
+
     public function __construct()
     {
         $this->modeCotisations = new ArrayCollection();
@@ -137,4 +142,18 @@ class Campagne
 
         return $this;
     }
+
+    public function getCampagne(): ?Groupement
+    {
+        return $this->campagne;
+    }
+
+    public function setCampagne(?Groupement $campagne): static
+    {
+        $this->campagne = $campagne;
+
+        return $this;
+    }
+
+    
 }
