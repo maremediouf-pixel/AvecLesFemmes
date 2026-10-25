@@ -19,6 +19,10 @@ class Membre extends User
     #[ORM\OneToMany(targetEntity: ModeCotisation::class, mappedBy: 'membre')]
     private Collection $modeCotisations;
 
+    #[ORM\ManyToOne(inversedBy: 'membres')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Role $role = null;
+
     public function __construct()
     {
         $this->modeCotisations = new ArrayCollection();
@@ -62,6 +66,18 @@ class Membre extends User
                 $modeCotisation->setMembre(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRole(): ?Role
+    {
+        return $this->role;
+    }
+
+    public function setRole(?Role $role): static
+    {
+        $this->role = $role;
 
         return $this;
     }
