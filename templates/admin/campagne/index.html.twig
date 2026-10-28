@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Campagnes{% endblock %}
+
+{% block body %}
+    <h1>Campagnes</h1>
+
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <p style="color: {{ type == 'success' ? 'green' : 'red' }}">{{ message }}</p>
+        {% endfor %}
+    {% endfor %}
+
+    <p>
+        <a href="{{ path('admin_campagne_new') }}">+ Nouvelle campagne</a> |
+        <a href="{{ path('app_admin') }}">Retour</a>
+    </p>
+
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr>
+                <th>Nom</th><th>Type</th><th>Groupement</th><th>Début</th><th>Fin</th>
+                <th>Montant</th><th>Exercice</th><th>Membres</th><th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for campagne in campagnes %}
+            <tr>
+                <td>{{ campagne.nom }}</td>
+                <td>{{ campagne.type.nomType }}</td>
+                <td>{{ campagne.groupement.nom }}</td>
+                <td>{{ campagne.dateDebut|date('d/m/Y') }}</td>
+                <td>{{ campagne.dateFin|date('d/m/Y') }}</td>
+                <td>{{ campagne.montant|number_format(0, ',', ' ') }} FCFA</td>
+                <td>{{ campagne.exercice.statut.value == 'EN_COURS' ? 'En cours' : 'Terminé' }}</td>
+                <td>{{ campagne.modeCotisations|length }}</td>
+                <td>
+                    {% if campagne.exercice.statut.value == 'EN_COURS' %}
+                        <a href="{{ path('admin_campagne_edit', {id: campagne.id}) }}">Modifier</a>
+                    {% endif %}
+                    <form method="post" action="{{ path('admin_campagne_delete', {id: campagne.id}) }}"
+                          style="display:inline" onsubmit="return confirm('Supprimer cette campagne ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ campagne.id) }}">
+                        <button type="submit">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="9">Aucune campagne.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
