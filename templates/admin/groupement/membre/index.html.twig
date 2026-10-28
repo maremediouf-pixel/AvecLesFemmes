@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Membres{% endblock %}
+
+{% block body %}
+    <h1>Membres</h1>
+
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <p style="color: {{ type == 'success' ? 'green' : 'red' }}">{{ message }}</p>
+        {% endfor %}
+    {% endfor %}
+
+    <p>
+        <a href="{{ path('admin_membre_new') }}">+ Nouveau membre</a> |
+        <a href="{{ path('app_admin') }}">Retour</a>
+    </p>
+
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr>
+                <th>Nom</th><th>Login</th><th>Téléphone</th><th>Fonction</th>
+                <th>Rôle</th><th>Groupement</th><th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for membre in membres %}
+            <tr>
+                <td>{{ membre.nomComplet }}</td>
+                <td>{{ membre.login }}</td>
+                <td>{{ membre.telephone }}</td>
+                <td>{{ membre.fonction }}</td>
+                <td>{{ membre.role.nomRole }}</td>
+                <td>{{ membre.groupement.nom }}</td>
+                <td>
+                    <a href="{{ path('admin_membre_edit', {id: membre.id}) }}">Modifier</a>
+                    <form method="post" action="{{ path('admin_membre_delete', {id: membre.id}) }}"
+                          style="display:inline" onsubmit="return confirm('Supprimer ce membre ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ membre.id) }}">
+                        <button type="submit">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="7">Aucun membre.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
