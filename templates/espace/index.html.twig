@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon espace{% endblock %}
+
+{% block body %}
+    <h1>Mon espace</h1>
+
+    <h2>Mon profil</h2>
+    <ul>
+        <li>Nom : {{ membre.nomComplet }}</li>
+        <li>Login : {{ membre.login }}</li>
+        <li>Téléphone : {{ membre.telephone }}</li>
+        <li>Adresse : {{ membre.adresse }}</li>
+        <li>Fonction : {{ membre.fonction }}</li>
+        <li>Rôle : {{ membre.role.nomRole }}</li>
+        <li>Groupement : {{ membre.groupement.nom }}</li>
+    </ul>
+
+    <h2>Exercice en cours</h2>
+    {% if exercice %}
+        <ul>
+            <li>Période : {{ exercice.dateDebut|date('d/m/Y') }} → {{ exercice.dateFin|date('d/m/Y') }}</li>
+            <li>Date limite des prêts : {{ exercice.dateLimitePrets|date('d/m/Y') }}</li>
+            <li>Date de rétribution : {{ exercice.dateRetribution|date('d/m/Y') }}</li>
+        </ul>
+    {% else %}
+        <p>Aucun exercice en cours pour votre groupement.</p>
+    {% endif %}
+
+    <h2>Mes campagnes</h2>
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr>
+                <th>Campagne</th><th>Type</th><th>Période</th><th>Mode</th><th>Montant dû</th><th>Exercice</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mode in affectations %}
+            <tr>
+                <td>{{ mode.campagne.nom }}</td>
+                <td>{{ mode.campagne.type.nomType }}</td>
+                <td>{{ mode.campagne.dateDebut|date('d/m/Y') }} → {{ mode.campagne.dateFin|date('d/m/Y') }}</td>
+                <td>{{ mode.libre ? 'Libre' : 'Fixe' }}</td>
+                <td>{{ mode.libre ? 'Au choix' : mode.campagne.montant|number_format(0, ',', ' ') ~ ' FCFA' }}</td>
+                <td>{{ mode.campagne.exercice.statut.value == 'EN_COURS' ? 'En cours' : 'Terminé' }}</td>
+            </tr>
+        {% else %}
+            <tr><td colspan="6">Vous n'êtes affecté(e) à aucune campagne.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <p><strong>Total des cotisations fixes : {{ totalFixe|number_format(0, ',', ' ') }} FCFA</strong></p>
+
+    <p><a href="{{ path('app_home') }}">Retour à l'accueil</a></p>
+{% endblock %}
