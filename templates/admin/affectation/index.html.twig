@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Membres de la campagne{% endblock %}
+
+{% block body %}
+    <h1>{{ campagne.nom }}</h1>
+    <p>
+        Type : {{ campagne.type.nomType }} |
+        Montant : {{ campagne.montant|number_format(0, ',', ' ') }} FCFA |
+        Période : {{ campagne.dateDebut|date('d/m/Y') }} → {{ campagne.dateFin|date('d/m/Y') }}
+    </p>
+
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <p style="color: {{ type == 'success' ? 'green' : 'red' }}">{{ message }}</p>
+        {% endfor %}
+    {% endfor %}
+
+    <p><a href="{{ path('admin_campagne_index') }}">Retour aux campagnes</a></p>
+
+    <h2>Membres affectés ({{ campagne.modeCotisations|length }})</h2>
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr><th>Membre</th><th>Fonction</th><th>Mode</th><th>Montant dû</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+        {% for mode in campagne.modeCotisations %}
+            <tr>
+                <td>{{ mode.membre.nomComplet }}</td>
+                <td>{{ mode.membre.fonction }}</td>
+                <td>{{ mode.libre ? 'Libre' : 'Fixe' }}</td>
+                <td>{{ mode.libre ? 'Au choix du membre' : campagne.montant|number_format(0, ',', ' ') ~ ' FCFA' }}</td>
+                <td>
+                    {% if modifiable %}
+                        <form method="post" action="{{ path('admin_affectation_remove', {id: mode.id}) }}"
+                              style="display:inline" onsubmit="return confirm('Retirer ce membre ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('retirer' ~ mode.id) }}">
+                            <button type="submit">Retirer</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="5">Aucun membre affecté.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if modifiable %}
+        <h2>Affecter des membres</h2>
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_widget(form) }}
+            <button type="submit">Affecter</button>
+        {{ form_end(form) }}
+    {% else %}
+        <p style="color:red">L'exercice de cette campagne est terminé : les affectations ne sont plus modifiables.</p>
+    {% endif %}
+{% endblock %}

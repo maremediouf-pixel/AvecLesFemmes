@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Exercices{% endblock %}
+
+{% block body %}
+    <h1>Exercices</h1>
+
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <p style="color: {{ type == 'success' ? 'green' : 'red' }}">{{ message }}</p>
+        {% endfor %}
+    {% endfor %}
+
+    <p>
+        <a href="{{ path('admin_exercice_new') }}">+ Ouvrir un exercice</a> |
+        <a href="{{ path('app_admin') }}">Retour</a>
+    </p>
+
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr>
+                <th>Groupement</th><th>Début</th><th>Fin</th><th>Limite prêts</th>
+                <th>Rétribution</th><th>Statut</th><th>Campagnes</th><th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for exercice in exercices %}
+            <tr>
+                <td>{{ exercice.groupement.nom }}</td>
+                <td>{{ exercice.dateDebut|date('d/m/Y') }}</td>
+                <td>{{ exercice.dateFin|date('d/m/Y') }}</td>
+                <td>{{ exercice.dateLimitePrets|date('d/m/Y') }}</td>
+                <td>{{ exercice.dateRetribution|date('d/m/Y') }}</td>
+                <td>{{ exercice.statut.value == 'EN_COURS' ? 'En cours' : 'Terminé' }}</td>
+                <td>{{ exercice.campagnes|length }}</td>
+                <td>
+                    {% if exercice.statut.value == 'EN_COURS' %}
+                        <form method="post" action="{{ path('admin_exercice_close', {id: exercice.id}) }}"
+                              style="display:inline" onsubmit="return confirm('Terminer cet exercice ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('close' ~ exercice.id) }}">
+                            <button type="submit">Terminer</button>
+                        </form>
+                    {% endif %}
+                    <form method="post" action="{{ path('admin_exercice_delete', {id: exercice.id}) }}"
+                          style="display:inline" onsubmit="return confirm('Supprimer cet exercice ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ exercice.id) }}">
+                        <button type="submit">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="8">Aucun exercice.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

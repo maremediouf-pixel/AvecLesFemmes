@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Campagne;
+use App\Entity\Exercice;
 use App\Entity\Groupement;
 use App\Entity\Membre;
 use App\Entity\ModeCotisation;
@@ -112,6 +113,16 @@ class AppFixtures extends Fixture
                 ->setTelephone($data['tel']);
             $manager->persist($groupement);
 
+            // Exercice du groupement (couvre toutes les campagnes)
+            $exercice = new Exercice(
+                new \DateTime('2026-09-01'),   // dateDebut
+                new \DateTime('2027-08-31'),   // dateFin
+                new \DateTime('2027-06-30'),   // dateLimitePrets
+                new \DateTime('2027-08-31'),   // dateRetribution
+            );
+            $exercice->setGroupement($groupement);
+            $manager->persist($exercice);
+
             // Membres (la présidente est Admin, les autres sont membres simples)
             $membres = [];
             foreach ($data['membres'] as [$nomComplet, $login, $fonction]) {
@@ -134,11 +145,12 @@ class AppFixtures extends Fixture
             foreach ($modeles as [$nom, $typeNom, $debut, $fin, $montant, $libre, $indices]) {
                 $campagne = (new Campagne())
                     ->setNom($nom . ' - ' . $data['nom'])
-                   ->setDateDebut(new \DateTime($debut))
-                   ->setDateFin(new \DateTime($fin))
+                    ->setDateDebut(new \DateTime($debut))
+                    ->setDateFin(new \DateTime($fin))
                     ->setMontant($montant * ($g % 2 === 0 ? 1 : 2))
                     ->setType($types[$typeNom])
-                    ->setGroupement($groupement);
+                    ->setGroupement($groupement)
+                    ->setExercice($exercice);
                 $manager->persist($campagne);
 
                 foreach ($indices as $i) {

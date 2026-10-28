@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Groupements{% endblock %}
+
+{% block body %}
+    <h1>Groupements</h1>
+
+    {% for type, messages in app.flashes %}
+        {% for message in messages %}
+            <p style="color: {{ type == 'success' ? 'green' : 'red' }}">{{ message }}</p>
+        {% endfor %}
+    {% endfor %}
+
+    <p>
+        <a href="{{ path('admin_groupement_new') }}">+ Nouveau groupement</a> |
+        <a href="{{ path('app_admin') }}">Retour</a>
+    </p>
+
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr>
+                <th>Nom</th><th>Adresse</th><th>Téléphone</th><th>Membres</th><th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for groupement in groupements %}
+            <tr>
+                <td>{{ groupement.nom }}</td>
+                <td>{{ groupement.adresse }}</td>
+                <td>{{ groupement.telephone }}</td>
+                <td>{{ groupement.membres|length }}</td>
+                <td>
+                    <a href="{{ path('admin_groupement_edit', {id: groupement.id}) }}">Modifier</a>
+                    <form method="post" action="{{ path('admin_groupement_delete', {id: groupement.id}) }}"
+                          style="display:inline" onsubmit="return confirm('Supprimer ce groupement ?');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ groupement.id) }}">
+                        <button type="submit">Supprimer</button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="5">Aucun groupement.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

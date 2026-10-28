@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ titre }}{% endblock %}
+
+{% block body %}
+    <h1>{{ titre }}</h1>
+
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {{ form_widget(form) }}
+        <button type="submit">Enregistrer</button>
+    {{ form_end(form) }}
+
+    <p><a href="{{ path('admin_campagne_index') }}">Annuler</a></p>
+{% endblock %}
