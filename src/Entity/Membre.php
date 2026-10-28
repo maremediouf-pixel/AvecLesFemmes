@@ -97,4 +97,15 @@ class Membre extends User
 
         return $this;
     }
+
+        public function getRoles(): array
+    {
+        $roles = ['ROLE_USER'];
+
+        if ($this->role?->getNomRole() === 'Admin') {
+            $roles[] = 'ROLE_ADMIN';
+        }
+
+        return array_unique($roles);
+    }
 }
