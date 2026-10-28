@@ -5,8 +5,12 @@
 {% block body %}
     <h1>Bienvenue {{ app.user.nomComplet }}</h1>
     <p>Fonction : {{ app.user.fonction }}</p>
+
+    <p><a href="{{ path('app_espace') }}">Mon espace</a></p>
+
     {% if is_granted('ROLE_ADMIN') %}
         <p><a href="{{ path('app_admin') }}">Espace administrateur</a></p>
     {% endif %}
+
     <p><a href="{{ path('app_logout') }}">Se déconnecter</a></p>
 {% endblock %}
