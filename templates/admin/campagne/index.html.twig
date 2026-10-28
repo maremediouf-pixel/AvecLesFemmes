@@ -35,6 +35,7 @@
                 <td>{{ campagne.exercice.statut.value == 'EN_COURS' ? 'En cours' : 'Terminé' }}</td>
                 <td>{{ campagne.modeCotisations|length }}</td>
                 <td>
+                    <a href="{{ path('admin_affectation_index', {id: campagne.id}) }}">Membres</a>
                     {% if campagne.exercice.statut.value == 'EN_COURS' %}
                         <a href="{{ path('admin_campagne_edit', {id: campagne.id}) }}">Modifier</a>
                     {% endif %}
